@@ -1,3 +1,13 @@
 .DS_Store
 *.tmp
 temp/
+
+# Private: strategy, pricing, negotiation, sensitive docs - keep OUT of public repo
+session-log.md
+docs/specs/
+docs/team-outputs/
+deliverables/*pavel*
+deliverables/*airbnb-listing-mockup*
+*.docx
+internet/
+inputs/
