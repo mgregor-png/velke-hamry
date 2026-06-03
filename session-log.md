@@ -24,3 +24,29 @@
 - `docs/specs/2026-05-27-positioning-design.md` (locked design)
 - `docs/team-outputs/{market-analyst,brand-strategist,visual-director,channel-copy-strategist}.md` (4 perspective docs)
 - `deliverables/2026-05-27-velke-hamry-positioning-deck.html` + `positioning/index.html` (deck mirror for clean URL)
+
+### 2026-06-03 - Session close
+
+**Done:** v2 INGOT deck for Pavel call (9 slides, recommendation-led, polished external-facing) + comms prep doc with objection handling + comprehensive Czech diacritics sweep (58 edits). Letter to Pavel was sent earlier in week (Martin + Smeky already aligned on INGOT). User clarified operational reality: Booking is single Muhu hotel (we are a room), AirBnB is separate, IG is own. Updated prep doc with 4-variant matrix reflecting this. Live at https://mgregor-png.github.io/velke-hamry/positioning/
+
+**Decisions:**
+- INGOT confirmed as recommended name. 6 tagline finalists (dropped "Slow. Wood. North." + "Z hamrů. Pro klid.")
+- 4 variant matrix for Pavel call: A (full Muhu -> INGOT rebrand), D (INGOT by Muhu sub-brand - RECOMMENDED, Marriott Edition pattern), B (sub-brand without Booking integration - NOT recommended, inconsistent journey), E (fallback if Pavel refuses - own IG + AirBnB only)
+- Lead with Variant D in Pavel call. Consistency principle: whatever path, user journey across Booking/AirBnB/IG must be consistent
+- 3 asks formulated under Variant D: (1) "INGOT by Muhu" pattern across channels, (2) AirBnB content under owner control, (3) own photo album in Muhu gallery
+- 5 objection responses pre-written (Muhu brand fragmentation / cost / what if it fails / other owners reaction / why rebrand)
+
+**Carry forward:**
+- Pavel call - use https://mgregor-png.github.io/velke-hamry/positioning/ as visual aid + `deliverables/2026-06-02-pavel-call-prep.md` as script
+- Lead with Variant D, hold Variant A as upside, dismiss Variant B, keep Variant E in back pocket as fallback only
+- Post-call: follow-up email within 24h. Update prep doc with what worked/did not.
+- If Pavel agrees: spustit 30-day execution (reshoot, AirBnB rewrite, IG launch @ingot.hamry or similar handle)
+- If Pavel hesitates: propose 30-day pilot on our apartment only with measurement gate
+- If Pavel refuses: activate Variant E fallback (own IG + AirBnB INGOT-branded, Booking stays Muhu, return in 6 months with data)
+- Pricing range still proposed: low 1300-1500 / shoulder 1700-2100 / peak 2800-3400 CZK/noc - revisit after Pavel decision
+
+**Files committed today:**
+- `deliverables/2026-06-02-velke-hamry-ingot-v2-deck.html` (v2 deck, 9 slides)
+- `deliverables/2026-06-02-pavel-call-prep.md` (call script + variant matrix + objection handling)
+- `positioning/index.html` (mirror for GH Pages clean URL)
+- 4 commits: deck v2 build, variant matrix update, Czech diacritics sweep, log close
