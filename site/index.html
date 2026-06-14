@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INGOT - designový apartmán v Jizerkách</title>
+<meta name="description" content="INGOT - architektonicky ukovaný designový apartmán s vlastní terasou v Jizerských horách. Surový navenek, jemný uvnitř. 87 minut z Prahy. Rezervujte napřímo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:#F1EEE7;color:#23221F;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+  img{display:block;max-width:100%;}
+  input,select,textarea,button{font-family:inherit;}
+  ::selection{background:#BF562E;color:#F1EEE7;}
+  a{color:inherit;}
+  /* hover / focus (converted from the design's runtime style-hover/style-focus) */
+  .nav-a{transition:color .2s;} .nav-a:hover{color:#BF562E;}
+  .cta:hover{background:#a8481f!important;}
+  .cta-ghost:hover{background:rgba(255,255,255,.18)!important;}
+  .galbtn img{transition:transform .6s cubic-bezier(.2,.6,.2,1);}
+  .galbtn:hover img{transform:scale(1.045);}
+  input:focus,select:focus,textarea:focus{border-color:#BF562E!important;outline:none;}
+  .lb-arrow:hover,.lb-close:hover{background:rgba(255,255,255,.18)!important;}
+  .sec-link:hover,.insta:hover{color:#f0a075!important;}
+  .foot-link:hover{color:#fff!important;}
+  /* nav links: desktop only */
+  #navlinks{display:none;}
+  @media(min-width:940px){#navlinks{display:flex!important;} #burger{display:none!important;}}
+  #mobilemenu{display:none;}
+  #mobilemenu.open{display:flex!important;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="lb"></div>
+
+<script>
+const GALLERY = [
+  { src:'assets/facade.jpg',         cs:'Černá kovová fasáda',       en:'Black metal facade' },
+  { src:'assets/terrace-hero.jpg',   cs:'Vlastní terasa',            en:'Private terrace' },
+  { src:'assets/living-2.jpg',       cs:'Obývací a jídelní prostor', en:'Living & dining' },
+  { src:'assets/bedroom-1.jpg',      cs:'Ložnice',                   en:'Bedroom' },
+  { src:'assets/firepit.jpg',        cs:'Večerní ohniště',           en:'Fire pit at dusk' },
+  { src:'assets/aerial.jpg',         cs:'Letecký pohled na areál',   en:'Aerial of the development' },
+  { src:'assets/living-1.jpg',       cs:'Obývací pokoj',             en:'Living room' },
+  { src:'assets/bath.jpg',           cs:'Koupelna',                  en:'Bathroom' },
+  { src:'assets/between.jpg',        cs:'Mezi ingoty',               en:'Between the ingots' },
+  { src:'assets/waterfall.jpg',      cs:'Vodopády v okolí',          en:'Waterfalls nearby' },
+  { src:'assets/terrace-detail.jpg', cs:'Ráno na terase',            en:'Morning on the terrace' },
+  { src:'assets/bedroom-2.jpg',      cs:'Druhá ložnice',             en:'Second bedroom' },
+];
+
+const FORMSPREE = 'https://formspree.io/f/xzdqyoeb';
+
+const DICT = {
+  cs: {
+    nav:{ apartman:'Apartmán', galerie:'Galerie', okoli:'Okolí', dostupnost:'Dostupnost', onas:'O nás', cta:'Poptat termín' },
+    hero:{ eyebrow:'Velké Hamry · Jizerské hory', tagline:'Inspirováno Severem. Ukováno v Jizerkách.', sub:'Architektonicky ukovaný designový apartmán s vlastní terasou a předzahrádkou. Surový navenek, jemný uvnitř. 87 minut z Prahy.', btnPrimary:'Poptat termín', btnSecondary:'Zobrazit dostupnost' },
+    apt:{ eyebrow:'O apartmánu · The apartment', h2:'Surový navenek, jemný uvnitř.', perex:'INGOT je přízemní designový apartmán postavený podle konceptu studia Reaktor jako jeden z „ukovaných obytných ingotů" - černá kovová fasáda, teplý borový interiér. Úroveň designu, která v Jizerkách není běžná.', c1t:'Architektura', c1b:'Ingotový tvar, černá kovová fasáda, industriální dědictví přímo z Velkých Hamrů - železné hamry od 13. století. Exteriér je identita, ne povrch.', c2t:'Interiér', c2b:'Hřejivé borové dřevo (CLT konstrukce), šalvějové akcenty, kurátované umění a severská jednoduchost. Teplo a detail jako kontrast k surovému exteriéru.', c3t:'Místo', c3b:'Vlastní terasa a předzahrádka s výhledem do lesa - místo na ranní kávu a večerní ticho, které většina apartmánů v Jizerkách nemá.' },
+    usp:[ {num:'87 min',label:'z Prahy'}, {num:'Terasa',label:'vlastní terasa'}, {num:'Zahrada',label:'soukromá předzahrádka'}, {num:'Garáž',label:'krytá garáž zdarma'}, {num:'250 Mb/s',label:'Wi-Fi, plně vybavená kuchyň'}, {num:'Ohniště',label:'tři společná ohniště'}, {num:'Hřiště',label:'dětské hřiště'}, {num:'Workout',label:'venkovní workout zóna'} ],
+    gallery:{ eyebrow:'Galerie · Gallery', h2:'Pohled dovnitř i ven.' },
+    story:{ eyebrow:'Příběh · Story', h2:'Z hamrů. Pro klid.', p1label:'Velké Hamry', p1:'Jméno Velké Hamry nese dědictví železných hamrů, které tu bušily od 13. století. Industriální stopa, ne kulisa.', p2label:'Studio Reaktor · 2023', p2:'V roce 2023 navrhlo studio Reaktor koncept „ukovaných obytných ingotů" - domy jako kovové odlitky usazené do svahu. INGOT je jeden z nich, povýšený do podoby, kterou si jeho architektura zaslouží.', diagram:'Ukovaný obytný ingot - INGOT.' },
+    around:{ eyebrow:'Okolí · Around', h2:'Jizerky a Krkonoše na dosah.', cards:[ {t:'Protržená přehrada', d:'Lesní stezka podél Bílé Desné k ruinám protržené přehrady. Klidná, atmosférická, ideální dopoledne.'}, {t:'Vodopády', d:'Mumlavské vodopády a kaskády Jizery - krátké výlety za vodou a tichem.'}, {t:'Rozhledna Štěpánka', d:'Kamenná rozhledna nad lesy, panorama Jizerek i Krkonoš. Nejlepší za jasného večera.'}, {t:'Jizerka', d:'Horská osada a rašeliniště s dřevěnými chodníky. Pomalá procházka, safírový potok.'}, {t:'Kavárny a restaurace', d:'Tipy na dobrou kávu a večeři v okolí - rádi poradíme osobně.'}, {t:'Pomalé večery', d:'Vlastní terasa, ohniště pod hvězdami a klid, který jinde nenajdete.'} ] },
+    avail:{ eyebrow:'Dostupnost a ceny · Availability & prices', h2:'Volné termíny v reálném čase.', perex:'Živý kalendář dostupnosti a cen přímo z rezervačního systému. Pro nejlepší cenu pošlete poptávku níže - vyřídíme ji napřímo.', caption:'Kalendář zobrazuje živá data pro tento apartmán.' },
+    booking:{ eyebrow:'Rezervace · Book direct', h2:'Rezervujte napřímo.', benefits:[ {t:'Nejlepší cena.', d:'Bez prostředníka, bez příplatků portálů.'}, {t:'Přímý kontakt.', d:'Rezervaci vyřídíme my, ne anonymní portál.'}, {t:'Flexibilita.', d:'Domluvíme příjezd, tipy na okolí i speciální přání.'} ], f:{ arrival:'Příjezd', departure:'Odjezd', guests:'Počet hostů', name:'Jméno', email:'E-mail', phone:'Telefon (nepovinné)', note:'Poznámka (nepovinné)', submit:'Odeslat poptávku', sending:'Odesílám...' }, guestOpts:[ {v:'1',l:'1 host'}, {v:'2',l:'2 hosté'}, {v:'3',l:'3 hosté'} ], micro:'Odesláním nás kontaktujete napřímo. Žádná platba teď.', secondary:'Chcete rezervovat hned? Otevřít rezervační systém →', successTitle:'Díky!', successBody:'Ozveme se co nejdřív.', errorTitle:'Něco se nepovedlo.', errorBody:'Zkuste to prosím znovu, nebo nám napište na Instagram.' },
+    about:{ eyebrow:'O nás · About us', h2:'Dva kamarádi, jedno místo.', intro:'Jsme dva kamarádi. INGOT jsme si vytvořili pro sebe - na volné dny, klid a čas s blízkými. A protože nám je tu dobře, rádi ho otevřeme i vám.', o1name:'Martin Smékal', o1role:'Provoz & hosté', o1line:'Postará se, aby všechno klaplo - od příjezdu až po odjezd.', o2name:'Martin Gregor', o2role:'Produkt & design', o2line:'Roky v kreativních agenturách. Od něj je důraz na detail a citlivý design celého apartmánu.' },
+    footer:{ tagline:'Inspirováno Severem. Ukováno v Jizerkách.', location:'Velké Hamry, Jizerské hory', rights:'Rezervujete přímo u nás, bez prostředníka. © 2026 INGOT', insta:'@ingot_hamry' },
+  },
+  en: {
+    nav:{ apartman:'Apartment', galerie:'Gallery', okoli:'Around', dostupnost:'Availability', onas:'About', cta:'Request dates' },
+    hero:{ eyebrow:'Velké Hamry · Jizera Mountains', tagline:'Inspired by the North. Forged in the Jizera Mountains.', sub:'An architecturally forged design apartment with its own terrace and front garden. Raw on the outside, warm within. 87 minutes from Prague.', btnPrimary:'Request dates', btnSecondary:'See availability' },
+    apt:{ eyebrow:'The apartment · O apartmánu', h2:'Raw on the outside, warm within.', perex:"INGOT is a ground-floor design apartment built to Studio Reaktor's concept of 'forged living ingots' - a black metal facade, a warm pine interior. A level of design that is not common in these mountains.", c1t:'Architecture', c1b:'The ingot form, a black metal facade, industrial heritage straight from Velké Hamry - iron forges since the 13th century. The exterior is identity, not surface.', c2t:'Interior', c2b:'Warm pine (CLT construction), sage accents, curated art and Nordic simplicity. Warmth and detail as a counterpoint to the raw exterior.', c3t:'The place', c3b:"A private terrace and front garden facing the forest - a place for morning coffee and evening quiet that most apartments here simply don't have." },
+    usp:[ {num:'87 min',label:'from Prague'}, {num:'Terrace',label:'private, your own'}, {num:'Garden',label:'private front garden'}, {num:'Garage',label:'covered, free'}, {num:'250 Mb/s',label:'Wi-Fi, full kitchen'}, {num:'Fire pits',label:'three shared'}, {num:'Playground',label:'for children'}, {num:'Workout',label:'outdoor zone'} ],
+    gallery:{ eyebrow:'Gallery · Galerie', h2:'A look inside and out.' },
+    story:{ eyebrow:'Story · Příběh', h2:'From the forges. For the quiet.', p1label:'Velké Hamry', p1:'The name Velké Hamry carries the heritage of the iron forges that rang here from the 13th century. An industrial trace, not a backdrop.', p2label:'Studio Reaktor · 2023', p2:"In 2023 Studio Reaktor designed the concept of 'forged living ingots' - houses like metal castings set into the slope. INGOT is one of them, raised to the form its architecture deserves.", diagram:'A forged living ingot - INGOT.' },
+    around:{ eyebrow:'Around · Okolí', h2:'The Jizera and Giant Mountains, within reach.', cards:[ {t:'The burst dam', d:'A forest trail along the Bílá Desná to the ruins of the burst dam. Calm, atmospheric, a perfect morning.'}, {t:'Waterfalls', d:'The Mumlava waterfalls and the Jizera cascades - short walks to water and quiet.'}, {t:'Štěpánka lookout', d:'A stone lookout tower above the forests, panoramas of both ranges. Best on a clear evening.'}, {t:'Jizerka', d:'A mountain hamlet and peat bog with wooden boardwalks. A slow walk, a sapphire creek.'}, {t:'Cafés & dining', d:'Where to find good coffee and dinner nearby - we are happy to point the way.'}, {t:'Slow evenings', d:"Your own terrace, a fire pit under the stars and a quiet you won't find elsewhere."} ] },
+    avail:{ eyebrow:'Availability & prices · Dostupnost', h2:'Live availability.', perex:'A live availability and price calendar straight from the booking system. For the best price, send an enquiry below - we handle it directly.', caption:'Live data for this apartment.' },
+    booking:{ eyebrow:'Book direct · Rezervace', h2:'Book direct.', benefits:[ {t:'Best price.', d:'No middleman, no platform fees.'}, {t:'Direct contact.', d:'We handle your booking, not an anonymous portal.'}, {t:'Flexibility.', d:"We'll arrange arrival, local tips and special requests."} ], f:{ arrival:'Arrival', departure:'Departure', guests:'Guests', name:'Name', email:'E-mail', phone:'Phone (optional)', note:'Note (optional)', submit:'Send enquiry', sending:'Sending...' }, guestOpts:[ {v:'1',l:'1 guest'}, {v:'2',l:'2 guests'}, {v:'3',l:'3 guests'} ], micro:'This sends us a direct enquiry. No payment now.', secondary:'Prefer to book instantly? Open the booking system →', successTitle:'Thank you!', successBody:"We'll be in touch shortly.", errorTitle:'Something went wrong.', errorBody:'Please try again, or message us on Instagram.' },
+    about:{ eyebrow:'About us · O nás', h2:'Two friends, one place.', intro:"We're two friends. We made INGOT for ourselves - for days off, quiet, and time with the people we love. And because it feels good here, we're glad to share it with you.", o1name:'Martin Smékal', o1role:'Operations & guests', o1line:'Makes sure everything runs smoothly - from arrival to departure.', o2name:'Martin Gregor', o2role:'Product & design', o2line:'Years in creative agencies. The eye for detail and considered design of the apartment come from him.' },
+    footer:{ tagline:'Inspired by the North. Forged in the Jizera Mountains.', location:'Velké Hamry, Jizera Mountains', rights:'Book directly with us, no middleman. © 2026 INGOT', insta:'@ingot_hamry' },
+  }
+};
+
+let lang = 'cs';
+let lbIndex = null;
+const app = document.getElementById('app');
+const lbEl = document.getElementById('lb');
+let io = null;
+
+function previoSrc(){ return 'https://booking.previo.cz/occupancy/?hotId=789961&currency=CZK&lang='+(lang==='en'?'en':'cs')+'&showRoomType=995241&redirectType=iframe'; }
+function previoBook(){ return 'https://booking.previo.cz/?hotId=789961&currency=CZK&lang='+(lang==='en'?'en':'cs')+'&roomType=995241'; }
+
+const SS = "font-family:'Space Grotesk',sans-serif";
+const eyebrow = (txt,color) => `<div data-reveal style="display:flex;align-items:center;gap:16px;margin-bottom:24px;"><span style="${SS};font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:${color};">${txt}</span><span style="height:1px;flex:1;max-width:80px;background:${color==='#e08a5e'?'rgba(255,255,255,.28)':'#BDB9AF'};"></span></div>`;
+
+function render(){
+  const t = DICT[lang];
+  const navBtn = (active) => `${SS};font-size:12px;font-weight:600;letter-spacing:.1em;background:none;border:none;cursor:pointer;padding:4px 1px;color:${active?'#BF562E':'#9a968c'};`;
+
+  app.innerHTML = `
+  <nav style="position:sticky;top:0;z-index:60;background:rgba(241,238,231,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #d9d5cb;">
+    <div style="max-width:1180px;margin:0 auto;padding:15px clamp(20px,5vw,56px);display:flex;align-items:center;justify-content:space-between;gap:22px;">
+      <a href="#top" style="${SS};font-weight:700;font-size:17px;letter-spacing:.42em;color:#23221F;text-decoration:none;">INGOT</a>
+      <div id="navlinks" style="align-items:center;gap:28px;">
+        <a class="nav-a" href="#apartman" style="${SS};font-size:13px;font-weight:500;color:#3a3833;text-decoration:none;">${t.nav.apartman}</a>
+        <a class="nav-a" href="#galerie" style="${SS};font-size:13px;font-weight:500;color:#3a3833;text-decoration:none;">${t.nav.galerie}</a>
+        <a class="nav-a" href="#okoli" style="${SS};font-size:13px;font-weight:500;color:#3a3833;text-decoration:none;">${t.nav.okoli}</a>
+        <a class="nav-a" href="#dostupnost" style="${SS};font-size:13px;font-weight:500;color:#3a3833;text-decoration:none;">${t.nav.dostupnost}</a>
+        <a class="nav-a" href="#onas" style="${SS};font-size:13px;font-weight:500;color:#3a3833;text-decoration:none;">${t.nav.onas}</a>
+        <span style="width:1px;height:18px;background:#cbc7bd;"></span>
+        <span style="display:flex;align-items:center;gap:7px;">
+          <button data-lang="cs" style="${navBtn(lang!=='en')}">CZ</button>
+          <span style="color:#bdb9af;font-size:12px;">/</span>
+          <button data-lang="en" style="${navBtn(lang==='en')}">EN</button>
+        </span>
+        <a class="cta" href="#rezervace" style="background:#BF562E;color:#F1EEE7;${SS};font-weight:600;font-size:11px;letter-spacing:.13em;text-transform:uppercase;padding:11px 18px;border-radius:3px;text-decoration:none;">${t.nav.cta}</a>
+      </div>
+      <button id="burger" aria-label="Menu" style="display:inline-flex;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px 2px;">
+        <span style="width:24px;height:2px;background:#23221F;display:block;"></span>
+        <span style="width:24px;height:2px;background:#23221F;display:block;"></span>
+        <span style="width:24px;height:2px;background:#23221F;display:block;"></span>
+      </button>
+    </div>
+    <div id="mobilemenu" style="border-top:1px solid #d9d5cb;background:rgba(241,238,231,.99);padding:10px clamp(20px,5vw,56px) 22px;flex-direction:column;">
+      <a class="mm-link" href="#apartman" style="${SS};font-size:16px;color:#23221F;text-decoration:none;padding:13px 0;border-bottom:1px solid #e2ded4;">${t.nav.apartman}</a>
+      <a class="mm-link" href="#galerie" style="${SS};font-size:16px;color:#23221F;text-decoration:none;padding:13px 0;border-bottom:1px solid #e2ded4;">${t.nav.galerie}</a>
+      <a class="mm-link" href="#okoli" style="${SS};font-size:16px;color:#23221F;text-decoration:none;padding:13px 0;border-bottom:1px solid #e2ded4;">${t.nav.okoli}</a>
+      <a class="mm-link" href="#dostupnost" style="${SS};font-size:16px;color:#23221F;text-decoration:none;padding:13px 0;border-bottom:1px solid #e2ded4;">${t.nav.dostupnost}</a>
+      <a class="mm-link" href="#onas" style="${SS};font-size:16px;color:#23221F;text-decoration:none;padding:13px 0;border-bottom:1px solid #e2ded4;">${t.nav.onas}</a>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-top:18px;">
+        <span style="display:flex;align-items:center;gap:9px;">
+          <button data-lang="cs" style="${navBtn(lang!=='en')}">CZ</button>
+          <span style="color:#bdb9af;">/</span>
+          <button data-lang="en" style="${navBtn(lang==='en')}">EN</button>
+        </span>
+        <a class="cta mm-link" href="#rezervace" style="background:#BF562E;color:#F1EEE7;${SS};font-weight:600;font-size:11px;letter-spacing:.13em;text-transform:uppercase;padding:12px 20px;border-radius:3px;text-decoration:none;">${t.nav.cta}</a>
+      </div>
+    </div>
+  </nav>
+
+  <header id="top" style="position:relative;min-height:clamp(580px,93vh,920px);display:flex;align-items:flex-end;background-image:linear-gradient(to top,rgba(20,19,17,.84),rgba(20,19,17,.10) 50%,rgba(20,19,17,.46)),url('assets/terrace-hero.jpg');background-size:cover;background-position:center 58%;">
+    <div style="max-width:1180px;margin:0 auto;width:100%;padding:0 clamp(20px,5vw,56px) clamp(46px,7vw,86px);">
+      <div style="max-width:780px;">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+          <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#e08a5e;white-space:nowrap;">${t.hero.eyebrow}</span>
+          <span style="flex:1;height:1px;background:rgba(255,255,255,.34);"></span>
+          <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.18em;color:rgba(244,241,234,.78);white-space:nowrap;">50.73° N - 15.37° E</span>
+        </div>
+        <h1 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(66px,12.5vw,168px);line-height:.84;letter-spacing:-.012em;color:#F4F1EA;margin:0;">INGOT</h1>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:22px;border-top:1px solid rgba(255,255,255,.24);padding-top:15px;">
+          <span style="${SS};font-weight:500;font-size:clamp(15px,1.7vw,20px);letter-spacing:-.005em;color:#F4F1EA;">${t.hero.tagline}</span>
+          <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,241,234,.7);white-space:nowrap;">Est. 2023</span>
+        </div>
+      </div>
+      <p style="font-size:clamp(15px,1.5vw,18px);line-height:1.62;color:#e7e3da;margin:16px 0 0;max-width:50ch;">${t.hero.sub}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:13px;margin-top:32px;">
+        <a class="cta" href="#rezervace" style="background:#BF562E;color:#F1EEE7;${SS};font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:15px 28px;border-radius:3px;text-decoration:none;">${t.hero.btnPrimary}</a>
+        <a class="cta-ghost" href="#dostupnost" style="background:rgba(255,255,255,.07);color:#F1EEE7;border:1px solid rgba(255,255,255,.55);${SS};font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:15px 28px;border-radius:3px;text-decoration:none;">${t.hero.btnSecondary}</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="apartman" style="scroll-margin-top:72px;background:#F1EEE7;padding:clamp(74px,9vw,128px) clamp(20px,5vw,56px);">
+    <div style="max-width:1180px;margin:0 auto;">
+      ${eyebrow(t.apt.eyebrow,'#BF562E')}
+      <h2 data-reveal style="${SS};font-weight:700;font-size:clamp(31px,4.8vw,56px);line-height:1.03;letter-spacing:-.015em;color:#23221F;margin:0;max-width:15ch;">${t.apt.h2}</h2>
+      <p data-reveal style="font-size:clamp(16px,1.6vw,19px);line-height:1.6;color:#4a473f;margin:26px 0 0;max-width:62ch;">${t.apt.perex}</p>
+      <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:clamp(28px,3.5vw,52px);margin-top:clamp(46px,5vw,72px);padding-top:clamp(34px,4vw,48px);border-top:1px solid #d8d4ca;">
+        ${[[t.apt.c1t,t.apt.c1b,'01'],[t.apt.c2t,t.apt.c2b,'02'],[t.apt.c3t,t.apt.c3b,'03']].map(([h,b,n])=>`
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span style="${SS};font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7E6752;">${n}</span>
+          <h3 style="${SS};font-weight:700;font-size:21px;color:#23221F;margin:0;">${h}</h3>
+          <p style="font-size:15px;line-height:1.62;color:#56534c;margin:0;">${b}</p>
+        </div>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#2B2B28;padding:clamp(64px,7vw,104px) clamp(20px,5vw,56px);">
+    <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1);">
+      ${t.usp.map(item=>`
+      <div style="background:#2B2B28;display:flex;flex-direction:column;gap:9px;padding:clamp(26px,3vw,38px) clamp(20px,2.4vw,30px);">
+        <span style="${SS};font-weight:700;font-size:clamp(28px,3.3vw,40px);line-height:1;letter-spacing:-.01em;color:#C49A67;">${item.num}</span>
+        <span style="font-size:14px;line-height:1.5;color:#c4c0b6;">${item.label}</span>
+      </div>`).join('')}
+    </div>
+  </section>
+
+  <section id="galerie" style="scroll-margin-top:72px;background:#E7E3D9;padding:clamp(74px,9vw,128px) clamp(20px,5vw,56px);">
+    <div style="max-width:1180px;margin:0 auto;">
+      ${eyebrow(t.gallery.eyebrow,'#BF562E')}
+      <h2 data-reveal style="${SS};font-weight:700;font-size:clamp(31px,4.8vw,56px);line-height:1.03;letter-spacing:-.015em;color:#23221F;margin:0 0 clamp(34px,4vw,48px);max-width:15ch;">${t.gallery.h2}</h2>
+      <div style="columns:300px;column-gap:12px;">
+        ${GALLERY.map((g,i)=>`
+        <button class="galbtn" data-idx="${i}" style="break-inside:avoid;margin:0 0 12px;padding:0;border:none;background:#cfcbc1;cursor:pointer;display:block;width:100%;border-radius:3px;overflow:hidden;position:relative;">
+          <img src="${g.src}" alt="${g[lang]}" loading="lazy" style="width:100%;height:auto;display:block;" />
+        </button>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section id="pribeh" style="scroll-margin-top:72px;background:#2B2B28;padding:clamp(74px,9vw,128px) clamp(20px,5vw,56px);">
+    <div style="max-width:1180px;margin:0 auto;">
+      ${eyebrow(t.story.eyebrow,'#e08a5e')}
+      <h2 data-reveal style="${SS};font-weight:700;font-size:clamp(31px,4.8vw,56px);line-height:1.03;letter-spacing:-.015em;color:#F1EEE7;margin:0;max-width:14ch;">${t.story.h2}</h2>
+      <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(30px,4vw,60px);margin-top:clamp(38px,4vw,56px);">
+        ${[[t.story.p1label,t.story.p1],[t.story.p2label,t.story.p2]].map(([l,p])=>`
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span style="${SS};font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#C49A67;">${l}</span>
+          <p style="font-size:clamp(15px,1.5vw,17px);line-height:1.66;color:#d4d0c6;margin:0;">${p}</p>
+        </div>`).join('')}
+      </div>
+      <div data-reveal style="margin-top:clamp(44px,5vw,72px);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:clamp(26px,4vw,46px);display:flex;flex-direction:column;align-items:center;gap:20px;">
+        <svg viewBox="0 0 360 300" style="width:100%;max-width:340px;height:auto;" stroke="#23221F" stroke-width="1.2" stroke-linejoin="round" shape-rendering="geometricPrecision">
+          <ellipse cx="170" cy="256" rx="118" ry="11" fill="rgba(0,0,0,.22)" stroke="none"></ellipse>
+          <g transform="translate(70,250)">
+            <path d="M0 0 L150 0 L150 -130 L75 -176 L0 -130 Z" fill="#CCC8BE"></path>
+            <path d="M150 0 L206 -32 L206 -162 L150 -130 Z" fill="#A8A49A"></path>
+            <path d="M0 -130 L75 -176 L131 -208 L56 -162 Z" fill="#BEBAB0"></path>
+            <path d="M150 -130 L75 -176 L131 -208 L206 -162 Z" fill="#A29E94"></path>
+            <line x1="30" y1="0" x2="30" y2="-130" stroke="rgba(35,34,31,.30)" stroke-width="1"></line>
+            <line x1="60" y1="0" x2="60" y2="-130" stroke="rgba(35,34,31,.30)" stroke-width="1"></line>
+            <line x1="90" y1="0" x2="90" y2="-130" stroke="rgba(35,34,31,.30)" stroke-width="1"></line>
+            <line x1="120" y1="0" x2="120" y2="-130" stroke="rgba(35,34,31,.30)" stroke-width="1"></line>
+            <rect x="62" y="-56" width="26" height="56" fill="#BF562E" stroke="#23221F" stroke-width="1.2"></rect>
+          </g>
+        </svg>
+        <span style="${SS};font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#9a968c;text-align:center;">${t.story.diagram}</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="okoli" style="scroll-margin-top:72px;background:#F1EEE7;padding:clamp(74px,9vw,128px) clamp(20px,5vw,56px);">
+    <div style="max-width:1180px;margin:0 auto;">
+      ${eyebrow(t.around.eyebrow,'#BF562E')}
+      <h2 data-reveal style="${SS};font-weight:700;font-size:clamp(31px,4.8vw,56px);line-height:1.03;letter-spacing:-.015em;color:#23221F;margin:0 0 clamp(34px,4vw,48px);max-width:15ch;">${t.around.h2}</h2>
+      <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(266px,1fr));gap:14px;">
+        ${t.around.cards.map(c=>`
+        <div style="background:#FAF8F2;border:1px solid #ddd9cf;border-radius:3px;padding:28px 26px;display:flex;flex-direction:column;gap:11px;">
+          <h3 style="${SS};font-weight:700;font-size:19px;color:#23221F;margin:0;">${c.t}</h3>
+          <p style="font-size:15px;line-height:1.62;color:#56534c;margin:0;">${c.d}</p>
+        </div>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section id="dostupnost" style="scroll-margin-top:72px;background:#E7E3D9;padding:clamp(74px,9vw,128px) clamp(20px,5vw,56px);">
+    <div style="max-width:1180px;margin:0 auto;">
+      ${eyebrow(t.avail.eyebrow,'#BF562E')}
+      <h2 data-reveal style="${SS};font-weight:700;font-size:clamp(31px,4.8vw,56px);line-height:1.03;letter-spacing:-.015em;color:#23221F;margin:0;max-width:16ch;">${t.avail.h2}</h2>
+      <p data-reveal style="font-size:clamp(15px,1.5vw,17px);line-height:1.62;color:#56534c;margin:22px 0 clamp(30px,3.5vw,42px);max-width:62ch;">${t.avail.perex}</p>
+      <div data-reveal style="background:#fff;border:1px solid #d4d0c6;border-radius:3px;padding:6px;">
+        <iframe src="${previoSrc()}" title="Previo" loading="lazy" style="width:100%;height:660px;border:none;border-radius:2px;display:block;background:#fff;"></iframe>
+      </div>
+      <p data-reveal style="${SS};font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a867c;margin:16px 0 0;">${t.avail.caption}</p>
+    </div>
+  </section>
+
+  <section id="rezervace" style="scroll-margin-top:72px;background:#2B2B28;padding:clamp(74px,9vw,128px) clamp(20px,5vw,56px);">
+    <div style="max-width:1180px;margin:0 auto;">
+      ${eyebrow(t.booking.eyebrow,'#e08a5e')}
+      <h2 data-reveal style="${SS};font-weight:700;font-size:clamp(31px,4.8vw,56px);line-height:1.03;letter-spacing:-.015em;color:#F1EEE7;margin:0 0 clamp(38px,4vw,56px);max-width:14ch;">${t.booking.h2}</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(34px,4vw,64px);align-items:start;">
+        <div data-reveal style="display:flex;flex-direction:column;gap:26px;">
+          ${t.booking.benefits.map(b=>`
+          <div style="display:flex;gap:15px;align-items:flex-start;">
+            <svg width="22" height="22" viewBox="0 0 22 22" style="flex:none;margin-top:2px;"><circle cx="11" cy="11" r="10.5" fill="none" stroke="#BF562E" stroke-width="1.2"/><path d="M6.5 11.2 L9.5 14.2 L15.5 7.5" fill="none" stroke="#BF562E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p style="margin:0;font-size:16px;line-height:1.55;"><span style="font-weight:600;color:#F1EEE7;">${b.t}</span> <span style="color:#bdb9af;">${b.d}</span></p>
+          </div>`).join('')}
+          <a class="sec-link" href="${previoBook()}" target="_blank" rel="noopener" style="${SS};font-size:14px;font-weight:500;color:#e08a5e;text-decoration:none;border-bottom:1px solid rgba(224,138,94,.4);padding-bottom:3px;align-self:flex-start;">${t.booking.secondary}</a>
+        </div>
+        <div data-reveal id="formWrap" style="background:#F1EEE7;border-radius:4px;padding:clamp(24px,3vw,38px);">
+          <form id="enquiry" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;">
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
+            <input type="hidden" name="_subject" value="INGOT - nová poptávka termínu" />
+            <input type="hidden" name="_language" value="${lang}" />
+            <label style="display:flex;flex-direction:column;gap:6px;">
+              <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:#7a766c;">${t.booking.f.arrival}</span>
+              <input type="date" name="arrival" required style="padding:11px 12px;border:1px solid #c9c5bb;border-radius:3px;background:#fff;font-size:15px;color:#23221F;width:100%;" />
+            </label>
+            <label style="display:flex;flex-direction:column;gap:6px;">
+              <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:#7a766c;">${t.booking.f.departure}</span>
+              <input type="date" name="departure" required style="padding:11px 12px;border:1px solid #c9c5bb;border-radius:3px;background:#fff;font-size:15px;color:#23221F;width:100%;" />
+            </label>
+            <label style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1;">
+              <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:#7a766c;">${t.booking.f.guests}</span>
+              <select name="guests" style="padding:11px 12px;border:1px solid #c9c5bb;border-radius:3px;background:#fff;font-size:15px;color:#23221F;width:100%;">
+                ${t.booking.guestOpts.map(o=>`<option value="${o.v}">${o.l}</option>`).join('')}
+              </select>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:6px;">
+              <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:#7a766c;">${t.booking.f.name}</span>
+              <input type="text" name="name" required style="padding:11px 12px;border:1px solid #c9c5bb;border-radius:3px;background:#fff;font-size:15px;color:#23221F;width:100%;" />
+            </label>
+            <label style="display:flex;flex-direction:column;gap:6px;">
+              <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:#7a766c;">${t.booking.f.email}</span>
+              <input type="email" name="email" required style="padding:11px 12px;border:1px solid #c9c5bb;border-radius:3px;background:#fff;font-size:15px;color:#23221F;width:100%;" />
+            </label>
+            <label style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1;">
+              <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:#7a766c;">${t.booking.f.phone}</span>
+              <input type="tel" name="phone" style="padding:11px 12px;border:1px solid #c9c5bb;border-radius:3px;background:#fff;font-size:15px;color:#23221F;width:100%;" />
+            </label>
+            <label style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1;">
+              <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:#7a766c;">${t.booking.f.note}</span>
+              <textarea name="note" rows="3" style="padding:11px 12px;border:1px solid #c9c5bb;border-radius:3px;background:#fff;font-size:15px;color:#23221F;width:100%;resize:vertical;font-family:'Inter',sans-serif;"></textarea>
+            </label>
+            <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:12px;margin-top:4px;">
+              <button type="submit" id="submitBtn" class="cta" style="background:#BF562E;color:#F1EEE7;border:none;${SS};font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:15px 26px;border-radius:3px;cursor:pointer;width:100%;">${t.booking.f.submit}</button>
+              <span style="font-size:13px;line-height:1.5;color:#7a766c;">${t.booking.micro}</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="onas" style="scroll-margin-top:72px;background:#F1EEE7;padding:clamp(74px,9vw,128px) clamp(20px,5vw,56px);">
+    <div style="max-width:1180px;margin:0 auto;">
+      ${eyebrow(t.about.eyebrow,'#BF562E')}
+      <h2 data-reveal style="${SS};font-weight:700;font-size:clamp(31px,4.8vw,56px);line-height:1.03;letter-spacing:-.015em;color:#23221F;margin:0;max-width:15ch;">${t.about.h2}</h2>
+      <p data-reveal style="font-size:clamp(16px,1.6vw,19px);line-height:1.6;color:#4a473f;margin:22px 0 clamp(40px,4.5vw,60px);max-width:54ch;">${t.about.intro}</p>
+      <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(28px,3.5vw,52px);">
+        ${[['MS',t.about.o1name,t.about.o1role,t.about.o1line],['MG',t.about.o2name,t.about.o2role,t.about.o2line]].map(([mono,name,role,line])=>`
+        <div style="display:flex;gap:20px;align-items:flex-start;">
+          <span style="flex:none;width:62px;height:62px;border-radius:50%;background:#E7E3D9;border:1px solid #d2cec4;display:flex;align-items:center;justify-content:center;${SS};font-weight:700;font-size:18px;letter-spacing:.04em;color:#7E6752;">${mono}</span>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <h3 style="${SS};font-weight:700;font-size:20px;color:#23221F;margin:0;">${name}</h3>
+            <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#BF562E;">${role}</span>
+            <p style="font-size:15px;line-height:1.62;color:#56534c;margin:4px 0 0;">${line}</p>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#23221F;padding:clamp(60px,7vw,96px) clamp(20px,5vw,56px) clamp(36px,4vw,48px);">
+    <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(28px,4vw,56px);align-items:start;">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <span style="${SS};font-weight:700;font-size:24px;letter-spacing:.4em;color:#F1EEE7;">INGOT</span>
+        <span style="font-size:14px;line-height:1.5;color:#a8a499;max-width:30ch;">${t.footer.tagline}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:9px;">
+        <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#7a766c;">${t.footer.location}</span>
+        <a class="insta" href="https://instagram.com/ingot_hamry" target="_blank" rel="noopener" style="font-size:15px;color:#e08a5e;text-decoration:none;">${t.footer.insta}</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:9px;">
+        <a class="foot-link" href="${previoBook()}" target="_blank" rel="noopener" style="${SS};font-size:13px;letter-spacing:.04em;color:#cfccc4;text-decoration:none;">${t.booking.secondary}</a>
+      </div>
+    </div>
+    <div style="max-width:1180px;margin:clamp(40px,5vw,64px) auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);">
+      <span style="font-size:13px;color:#888479;">${t.footer.rights}</span>
+    </div>
+  </footer>`;
+
+  attach();
+  initReveal();
+}
+
+function attach(){
+  app.querySelectorAll('[data-lang]').forEach(b=> b.addEventListener('click', ()=> setLang(b.getAttribute('data-lang'))));
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('mobilemenu');
+  if(burger && menu){ burger.addEventListener('click', ()=> menu.classList.toggle('open')); }
+  app.querySelectorAll('.mm-link').forEach(a=> a.addEventListener('click', ()=> menu && menu.classList.remove('open')));
+  app.querySelectorAll('.galbtn').forEach(b=> b.addEventListener('click', ()=> openLb(parseInt(b.getAttribute('data-idx'),10))));
+  const form = document.getElementById('enquiry');
+  if(form) form.addEventListener('submit', handleSubmit);
+}
+
+function setLang(l){
+  if(l===lang) return;
+  lang = l;
+  try{ localStorage.setItem('ingot_lang', l); }catch(e){}
+  document.documentElement.lang = l;
+  render();
+}
+
+function initReveal(){
+  if(io) io.disconnect();
+  io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.style.opacity='1'; en.target.style.transform='none'; io.unobserve(en.target); } });
+  }, { threshold:0.1, rootMargin:'0px 0px -40px 0px' });
+  app.querySelectorAll('[data-reveal]').forEach(el=>{
+    el.style.opacity='0'; el.style.transform='translateY(20px)';
+    el.style.transition='opacity .7s cubic-bezier(.2,.6,.2,1), transform .7s cubic-bezier(.2,.6,.2,1)';
+    io.observe(el);
+  });
+}
+
+/* ---- lightbox ---- */
+function openLb(i){ lbIndex=i; renderLb(); }
+function closeLb(){ lbIndex=null; renderLb(); }
+function nextImg(){ if(lbIndex===null) return; lbIndex=(lbIndex+1)%GALLERY.length; renderLb(); }
+function prevImg(){ if(lbIndex===null) return; lbIndex=(lbIndex-1+GALLERY.length)%GALLERY.length; renderLb(); }
+function renderLb(){
+  if(lbIndex===null){ lbEl.innerHTML=''; document.body.style.overflow=''; return; }
+  document.body.style.overflow='hidden';
+  const g = GALLERY[lbIndex];
+  const cap = g[lang];
+  lbEl.innerHTML = `
+  <div id="lbOverlay" style="position:fixed;inset:0;z-index:100;background:rgba(18,17,15,.95);display:flex;align-items:center;justify-content:center;padding:clamp(14px,4vw,56px);">
+    <button class="lb-close" id="lbClose" aria-label="Close" style="position:absolute;top:18px;right:22px;background:none;border:none;color:#e7e3da;font-size:30px;line-height:1;cursor:pointer;">✕</button>
+    <button class="lb-arrow" id="lbPrev" aria-label="Prev" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#f1eee7;width:48px;height:48px;border-radius:50%;font-size:26px;line-height:1;cursor:pointer;">‹</button>
+    <button class="lb-arrow" id="lbNext" aria-label="Next" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#f1eee7;width:48px;height:48px;border-radius:50%;font-size:26px;line-height:1;cursor:pointer;">›</button>
+    <figure id="lbFig" style="margin:0;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:1120px;">
+      <img src="${g.src}" alt="${cap}" style="max-height:80vh;max-width:88vw;width:auto;object-fit:contain;border-radius:3px;" />
+      <figcaption style="display:flex;align-items:center;gap:16px;">
+        <span style="font-size:14px;color:#cfccc4;">${cap}</span>
+        <span style="${SS};font-size:12px;letter-spacing:.1em;color:#e08a5e;">${lbIndex+1} / ${GALLERY.length}</span>
+      </figcaption>
+    </figure>
+  </div>`;
+  document.getElementById('lbOverlay').addEventListener('click', closeLb);
+  document.getElementById('lbClose').addEventListener('click', (e)=>{ e.stopPropagation(); closeLb(); });
+  document.getElementById('lbPrev').addEventListener('click', (e)=>{ e.stopPropagation(); prevImg(); });
+  document.getElementById('lbNext').addEventListener('click', (e)=>{ e.stopPropagation(); nextImg(); });
+  document.getElementById('lbFig').addEventListener('click', (e)=> e.stopPropagation());
+}
+window.addEventListener('keydown', (e)=>{
+  if(lbIndex===null) return;
+  if(e.key==='Escape') closeLb();
+  else if(e.key==='ArrowRight') nextImg();
+  else if(e.key==='ArrowLeft') prevImg();
+});
+
+/* ---- form ---- */
+async function handleSubmit(e){
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  if(data.get('_gotcha')) return;
+  const t = DICT[lang];
+  const btn = document.getElementById('submitBtn');
+  if(btn){ btn.disabled = true; btn.textContent = t.booking.f.sending; btn.style.opacity = '.7'; btn.style.cursor='default'; }
+  let ok = false;
+  try{
+    const res = await fetch(FORMSPREE, { method:'POST', body:data, headers:{ 'Accept':'application/json' } });
+    ok = res.ok;
+  }catch(err){ ok = false; }
+  const wrap = document.getElementById('formWrap');
+  if(!wrap) return;
+  if(ok){
+    wrap.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;padding:clamp(20px,3vw,40px) 0;">
+      <svg width="42" height="42" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10.5" fill="none" stroke="#7E8769" stroke-width="1.2"/><path d="M6.5 11.2 L9.5 14.2 L15.5 7.5" fill="none" stroke="#7E8769" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h3 style="${SS};font-weight:700;font-size:26px;color:#23221F;margin:6px 0 0;">${t.booking.successTitle}</h3>
+      <p style="font-size:16px;line-height:1.6;color:#56534c;margin:0;">${t.booking.successBody}</p>
+    </div>`;
+  } else {
+    if(btn){ btn.disabled=false; btn.textContent=t.booking.f.submit; btn.style.opacity='1'; btn.style.cursor='pointer'; }
+    let err = document.getElementById('formErr');
+    if(!err){
+      err = document.createElement('p');
+      err.id = 'formErr';
+      err.style.cssText = "grid-column:1/-1;margin:0;font-size:14px;line-height:1.5;color:#BF562E;";
+      form.appendChild(err);
+    }
+    err.innerHTML = `<strong>${t.booking.errorTitle}</strong> ${t.booking.errorBody}`;
+  }
+}
+
+/* ---- init ---- */
+(function(){
+  try{
+    const s = localStorage.getItem('ingot_lang');
+    if(s==='cs'||s==='en') lang = s;
+  }catch(e){}
+  document.documentElement.lang = lang;
+  render();
+})();
+</script>
+</body>
+</html>
