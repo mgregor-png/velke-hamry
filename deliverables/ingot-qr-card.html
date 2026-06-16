@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#d8d4ca;display:flex;justify-content:center;padding:30px;font-family:'Inter',sans-serif}
+  .card{width:600px;height:840px;background:#F1EEE7;color:#23221F;display:flex;flex-direction:column;align-items:center;text-align:center;padding:64px 56px;position:relative;}
+  .eyebrow{font-family:'Space Grotesk';font-weight:600;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:#BF562E;}
+  .wordmark{font-family:'Space Grotesk';font-weight:700;font-size:52px;letter-spacing:.36em;padding-left:.36em;margin:22px 0 0;}
+  .rule{width:60px;height:2px;background:#BF562E;margin:26px 0;}
+  .h{font-family:'Space Grotesk';font-weight:700;font-size:30px;margin-bottom:6px;}
+  .h2{font-family:'Space Grotesk';font-weight:500;font-size:17px;color:#7a766c;letter-spacing:.02em;}
+  .sub{font-size:15px;line-height:1.55;color:#4a473f;max-width:34ch;margin:18px auto 0;}
+  #qr{margin:38px auto 0;padding:16px;background:#fff;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.1);display:inline-block;line-height:0;}
+  #qr img{display:block;}
+  .scan{font-family:'Space Grotesk';font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#23221F;margin-top:22px;}
+  .foot{position:absolute;bottom:42px;left:0;right:0;font-family:'Space Grotesk';font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#9a968c;}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="eyebrow">Velké Hamry · Jizerské hory</div>
+    <div class="wordmark">INGOT</div>
+    <div class="rule"></div>
+    <div class="h">Průvodce okolím</div>
+    <div class="h2">Area guide</div>
+    <div class="sub">Tipy na výlety, vyhlídky, vodopády a kavárny v okolí - i informace k pobytu. / Trips, viewpoints, waterfalls and stay info.</div>
+    <div id="qr"></div>
+    <div class="scan">Naskenujte telefonem · Scan with your phone</div>
+    <div class="foot">@ingot_hamry · ingot-hamry.cz</div>
+  </div>
+<script>
+  new QRCode(document.getElementById("qr"), {
+    text: "https://ingot-hamry.cz/pruvodce/",
+    width: 230, height: 230,
+    colorDark: "#23221F", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+</script>
+</body>
+</html>

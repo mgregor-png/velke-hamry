@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INGOT - průvodce okolím | Jizerské hory</title>
+<meta name="description" content="Tipy na výlety, vyhlídky, vodopády a kavárny v okolí apartmánu INGOT ve Velkých Hamrech. Průvodce pro hosty.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://mgregor-png.github.io/velke-hamry-app/places.js"></script>
+<style>
+  :root{--paper:#F1EEE7;--paper2:#E7E3D9;--concrete:#BDB9AF;--anth:#2B2B28;--ink:#23221F;--pine:#C49A67;--terra:#BF562E;--sage:#7E8769;--muted:#7a766c;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  img{display:block;max-width:100%}
+  a{color:inherit}
+  .ss{font-family:'Space Grotesk',sans-serif;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,40px);}
+  nav{position:sticky;top:0;z-index:50;background:rgba(241,238,231,.9);backdrop-filter:blur(12px);border-bottom:1px solid #d9d5cb;}
+  nav .row{display:flex;align-items:center;justify-content:space-between;padding:13px clamp(16px,4vw,40px);max-width:1080px;margin:0 auto;}
+  .wordmark{font-family:'Space Grotesk';font-weight:700;letter-spacing:.34em;font-size:16px;text-decoration:none;color:var(--ink);padding-left:.34em;}
+  .navr{display:flex;align-items:center;gap:14px;}
+  .lang button{font-family:'Space Grotesk';font-size:12px;font-weight:600;letter-spacing:.08em;background:none;border:none;cursor:pointer;padding:3px;}
+  .backlink{font-family:'Space Grotesk';font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--terra);text-decoration:none;}
+  .eyebrow{font-family:'Space Grotesk';font-weight:600;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--terra);}
+  h1{font-family:'Space Grotesk';font-weight:700;font-size:clamp(28px,5vw,46px);line-height:1.04;letter-spacing:-.015em;margin:10px 0 0;}
+  .intro{font-size:clamp(15px,1.6vw,18px);line-height:1.6;color:#4a473f;margin:16px 0 0;max-width:60ch;}
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 6px;}
+  .pill{font-family:'Space Grotesk';font-size:13px;font-weight:500;border:1px solid var(--concrete);background:#fff;border-radius:999px;padding:8px 14px;cursor:pointer;}
+  .pill.on{background:var(--anth);color:var(--paper);border-color:var(--anth);}
+  #map{height:360px;border-radius:6px;border:1px solid #d4d0c6;margin:18px 0 6px;z-index:0;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:18px;}
+  .card{background:#fff;border:1px solid #e2ded4;border-radius:6px;overflow:hidden;display:flex;flex-direction:column;transition:opacity .25s;}
+  .card.dim{opacity:.34;}
+  .card .ph{height:170px;background:#cfcbc1 center/cover;}
+  .card .body{padding:16px 17px 17px;display:flex;flex-direction:column;gap:9px;flex:1;}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;}
+  .badge{font-family:'Space Grotesk';font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;background:var(--paper2);color:#5a564e;border-radius:3px;padding:3px 8px;}
+  .badge.best{background:var(--terra);color:#fff;}
+  .cname{font-family:'Space Grotesk';font-weight:700;font-size:19px;}
+  .meta{font-size:12.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .stars{color:var(--terra);font-weight:600;}
+  .desc{font-size:14px;line-height:1.55;color:#4a473f;}
+  .wtags{display:flex;flex-wrap:wrap;gap:6px;}
+  .wtag{font-size:11.5px;color:#6b6760;background:var(--paper);border:1px solid #e2ded4;border-radius:3px;padding:2px 7px;}
+  details{margin-top:2px;border-top:1px solid #eee7da;padding-top:9px;}
+  details summary{font-family:'Space Grotesk';font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--terra);cursor:pointer;list-style:none;}
+  details summary::-webkit-details-marker{display:none}
+  .dl{font-size:13px;line-height:1.6;color:#4a473f;margin-top:9px;}
+  .dl b{color:var(--ink);font-weight:600;}
+  .links{display:flex;gap:14px;margin-top:4px;}
+  .links a{font-family:'Space Grotesk';font-size:12.5px;font-weight:500;color:var(--terra);text-decoration:none;border-bottom:1px solid rgba(191,86,46,.35);padding-bottom:2px;}
+  section.stay{background:var(--anth);color:var(--paper);margin-top:46px;padding:clamp(40px,6vw,72px) 0;}
+  section.stay .eyebrow{color:#e08a5e;}
+  section.stay h2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(24px,4vw,38px);margin:10px 0 0;color:#F1EEE7;}
+  .staygrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:30px;}
+  .stayblock h3{font-family:'Space Grotesk';font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--pine);margin-bottom:8px;}
+  .stayblock p{font-size:14px;line-height:1.65;color:#d4d0c6;}
+  footer{background:var(--ink);color:#a8a499;padding:34px 0;font-size:13px;}
+  footer .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center;}
+  .section-head{margin-top:38px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const T = {
+  cs:{
+    nav_back:'← INGOT', guide:'Průvodce okolím',
+    eyebrow:'Velké Hamry · Jizerské hory',
+    h1:'Co dělat v okolí',
+    intro:'Vybrali jsme pro vás nejhezčí místa kolem INGOTu - výlety, vyhlídky, vodopády i tipy na déšť. Klikněte na špendlík v mapě nebo procházejte tipy níže.',
+    filtersLabel:'Filtrovat podle počasí',
+    f:{sunny:'☀️ Slunečno', cold:'❄️ Chladno', rainy:'🌧️ Déšť', windy:'💨 Vítr', all:'Vše'},
+    placesHead:'Tipy na výlety',
+    detailsLabel:'Detaily',
+    dl:{hours:'Otevřeno', parking:'Parkování', fee:'Vstup', time:'Čas', food:'Občerstvení', bestTime:'Kdy nejlépe', warnings:'Dobré vědět', web:'Web'},
+    mapLink:'Mapy.cz', gmapsLink:'Google',
+    stayEyebrow:'Pro hosty', stayH2:'Informace k pobytu',
+    stay:[
+      {h:'Příjezd a odjezd', p:'Check-in mezi 15:00 a 24:00. Předem nám prosím dejte vědět přibližný čas příjezdu. Příjezd je možný osobně (do 20:00) nebo pomocí PINu ke schránce s klíčem. Instrukce k příjezdu a vstupu vám zašleme předem e-mailem nebo SMS. Check-out nejpozději do 10:00.'},
+      {h:'Noční klid', p:'Noční klid prosím dodržujte od 22:00 do 6:00. Respektujte ostatní hosty i sousedy a vyhněte se nadměrnému hluku i přes den.'},
+      {h:'Kouření a mazlíčci', p:'Kouření je zakázáno ve všech vnitřních prostorách. Ubytování s domácím mazlíčkem bohužel není možné.'},
+      {h:'Pořádek a úklid', p:'Závěrečný úklid je zajištěn. Přesto prosíme o běžné udržování pořádku a umytí použitého nádobí před odjezdem.'},
+      {h:'Škody a závady', p:'Pokud dojde k poškození vybavení nebo se objeví technická závada, dejte nám prosím hned vědět. Za škody způsobené během pobytu odpovídá host.'},
+      {h:'Wi-Fi', p:'Přístupové údaje k Wi-Fi najdete v apartmánu na pokoji.'}
+    ],
+    footRights:'© 2026 INGOT · Velké Hamry, Jizerské hory'
+  },
+  en:{
+    nav_back:'← INGOT', guide:'Area guide',
+    eyebrow:'Velké Hamry · Jizera Mountains',
+    h1:'What to do nearby',
+    intro:'We picked the best spots around INGOT for you - trails, viewpoints, waterfalls and rainy-day ideas. Tap a pin on the map or browse the tips below.',
+    filtersLabel:'Filter by weather',
+    f:{sunny:'☀️ Sunny', cold:'❄️ Cold', rainy:'🌧️ Rain', windy:'💨 Wind', all:'All'},
+    placesHead:'Trip ideas',
+    detailsLabel:'Details',
+    dl:{hours:'Hours', parking:'Parking', fee:'Entry', time:'Time', food:'Food', bestTime:'Best time', warnings:'Good to know', web:'Web'},
+    mapLink:'Mapy.cz', gmapsLink:'Google',
+    stayEyebrow:'For guests', stayH2:'Your stay',
+    stay:[
+      {h:'Arrival & departure', p:'Check-in between 15:00 and 24:00. Please let us know your approximate arrival time in advance. Arrival is possible in person (until 20:00) or via a PIN to the key box. We will send arrival and access instructions in advance by e-mail or SMS. Check-out by 10:00 at the latest.'},
+      {h:'Quiet hours', p:'Please observe quiet hours from 22:00 to 6:00. Be considerate of other guests and neighbours and avoid excessive noise during the day too.'},
+      {h:'Smoking & pets', p:'Smoking is not allowed in any indoor areas. Unfortunately we cannot accommodate pets.'},
+      {h:'Tidiness', p:'A final cleaning is included. Even so, we kindly ask you to keep things tidy and wash any used dishes before you leave.'},
+      {h:'Damage & faults', p:'If anything gets damaged or a fault appears, please let us know right away. Guests are responsible for damage caused during the stay.'},
+      {h:'Wi-Fi', p:'The Wi-Fi details are in the apartment.'}
+    ],
+    footRights:'© 2026 INGOT · Velké Hamry, Jizera Mountains'
+  }
+};
+const CARDS = window.CARDS || [];
+let lang = (function(){ try{ const s=localStorage.getItem('ingot_lang'); return (s==='en')?'en':'cs'; }catch(e){ return 'cs'; } })();
+let activeWeather = null;
+let map=null, markers={};
+
+function matchesWeather(c){ if(!activeWeather) return true; const good=(c.good||'').split(','); const bad=(c.bad||'').split(','); return good.includes(activeWeather) && !bad.includes(activeWeather); }
+
+function cardHtml(c){
+  const t=T[lang], L=c[lang]||c.cs;
+  const photo=(c.photos&&c.photos[0])||'';
+  const badges=(L.badges||[]).map(b=>`<span class="badge${/best/i.test(b)?' best':''}">${b}</span>`).join('');
+  const wtags=(L.weatherTags||[]).map(w=>`<span class="wtag">${w}</span>`).join('');
+  const d=L.details||{};
+  const dl=t.dl;
+  const row=(k,v)=> v?`<div><b>${dl[k]}:</b> ${v}</div>`:'';
+  const stars=c.gmaps?`<span class="stars">★ ${c.gmaps.rating}</span> <span>(${c.gmaps.reviews})</span>`:'';
+  return `<div class="card" data-id="${c.id}" id="place-${c.id}">
+    <div class="ph" style="background-image:url('${photo}')"></div>
+    <div class="body">
+      <div class="badges">${badges}</div>
+      <div class="cname">${L.name}</div>
+      <div class="meta"><span>${L.loc}</span><span>·</span><span>${L.dist}</span>${stars?'<span>·</span>'+stars:''}</div>
+      <div class="wtags">${wtags}<span class="wtag">${L.strollerLabel}</span></div>
+      <div class="desc">${L.desc}</div>
+      <details><summary>${t.detailsLabel}</summary><div class="dl">
+        ${row('hours',d.hours)}${row('parking',d.parking)}${row('fee',d.fee)}${row('time',d.time)}${row('food',d.food)}${row('bestTime',d.bestTime)}${row('warnings',d.warnings)}
+      </div></details>
+      <div class="links">${c.link?`<a href="${c.link}" target="_blank" rel="noopener">${t.mapLink} ↗</a>`:''}${c.gmaps&&c.gmaps.url?`<a href="${c.gmaps.url}" target="_blank" rel="noopener">${t.gmapsLink} ↗</a>`:''}</div>
+    </div>
+  </div>`;
+}
+
+function render(){
+  const t=T[lang];
+  const weatherKeys=['sunny','cold','rainy','windy'];
+  const pills=`<button class="pill${!activeWeather?' on':''}" data-w="">${t.f.all}</button>`+
+    weatherKeys.map(k=>`<button class="pill${activeWeather===k?' on':''}" data-w="${k}">${t.f[k]}</button>`).join('');
+  const cards=CARDS.map(cardHtml).join('');
+  const stay=t.stay.map(s=>`<div class="stayblock"><h3>${s.h}</h3><p>${s.p}</p></div>`).join('');
+  document.getElementById('app').innerHTML=`
+    <nav><div class="row">
+      <a class="wordmark" href="/">INGOT</a>
+      <div class="navr">
+        <span class="lang"><button data-lang="cs" style="color:${lang!=='en'?'#BF562E':'#9a968c'}">CZ</button><span style="color:#bdb9af">/</span><button data-lang="en" style="color:${lang==='en'?'#BF562E':'#9a968c'}">EN</button></span>
+        <a class="backlink" href="/">${t.nav_back}</a>
+      </div>
+    </div></nav>
+    <div class="wrap" style="padding-top:clamp(28px,5vw,52px);">
+      <div class="eyebrow">${t.eyebrow}</div>
+      <h1>${t.h1}</h1>
+      <p class="intro">${t.intro}</p>
+      <div class="eyebrow" style="margin-top:26px;color:var(--muted)">${t.filtersLabel}</div>
+      <div class="filters">${pills}</div>
+      <div id="map"></div>
+      <div class="eyebrow section-head">${t.placesHead}</div>
+      <div class="grid">${cards}</div>
+    </div>
+    <section class="stay"><div class="wrap">
+      <div class="eyebrow">${t.stayEyebrow}</div>
+      <h2>${t.stayH2}</h2>
+      <div class="staygrid">${stay}</div>
+    </div></section>
+    <footer><div class="wrap"><div class="row">
+      <span class="ss" style="font-weight:700;letter-spacing:.3em;color:#F1EEE7;">INGOT</span>
+      <span>${t.footRights}</span>
+      <a href="https://instagram.com/ingot_hamry" target="_blank" rel="noopener" style="color:#e08a5e;text-decoration:none;">@ingot_hamry</a>
+    </div></div></footer>`;
+  // events
+  document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{ lang=b.getAttribute('data-lang'); try{localStorage.setItem('ingot_lang',lang);}catch(e){} document.documentElement.lang=lang; render(); });
+  document.querySelectorAll('.pill').forEach(b=>b.onclick=()=>{ const w=b.getAttribute('data-w'); activeWeather=w||null; applyFilter(); document.querySelectorAll('.pill').forEach(p=>p.classList.toggle('on', (p.getAttribute('data-w')||'')===(activeWeather||''))); });
+  initMap();
+  applyFilter();
+}
+function applyFilter(){ CARDS.forEach(c=>{ const el=document.getElementById('place-'+c.id); if(el) el.classList.toggle('dim', !matchesWeather(c)); }); if(markers&&map){ CARDS.forEach(c=>{ const m=markers[c.id]; if(m){ m.setOpacity(matchesWeather(c)?1:.3); } }); } }
+function initMap(){
+  if(map){ map.remove(); map=null; markers={}; }
+  map=L.map('map',{scrollWheelZoom:false}).setView([50.7167,15.3167],11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(map);
+  L.circleMarker([50.7405,15.3760],{radius:7,color:'#BF562E',fillColor:'#BF562E',fillOpacity:1,weight:2}).addTo(map).bindPopup('INGOT · Velké Hamry');
+  CARDS.forEach(c=>{ if(c.lat&&c.lng){ const L2=c[lang]||c.cs; const m=L.marker([c.lat,c.lng]).addTo(map).bindPopup('<b>'+L2.name+'</b>'); m.on('click',()=>{ const el=document.getElementById('place-'+c.id); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); }); markers[c.id]=m; } });
+}
+document.documentElement.lang=lang;
+render();
+</script>
+</body>
+</html>
